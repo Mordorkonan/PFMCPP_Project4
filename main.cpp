@@ -13,11 +13,11 @@ New/This/Pointers/References conclusion
      on the lines below it, write a struct named 'HeapA' that correctly shows how to own an instance of 'A' 
          on the heap without leaking, without using smart pointers. 
  */
-
-
-
-
-
+struct A { };
+struct HeapA
+{
+    A a;
+};
 
 
 
@@ -183,99 +183,412 @@ int main()
 
 struct FloatType
 {
-    float add(float lhs, float rhs);
-    float subtract(float lhs, float rhs);
-    float multiply(float lhs, float rhs);
-    float divide(float lhs, float rhs);
+    FloatType(float& float_) : value(float_) { }
+
+    FloatType add(float rhs);
+    FloatType subtract(float rhs);
+    FloatType multiply(float rhs);
+    FloatType divide(float rhs);
+
+    FloatType add(const FloatType& rhs);
+    FloatType subtract(const FloatType& rhs);
+    FloatType multiply(const FloatType& rhs);
+    FloatType divide(const FloatType& rhs);
+
+    FloatType add(const DoubleType& rhs);
+    FloatType subtract(const DoubleType& rhs);
+    FloatType multiply(const DoubleType& rhs);
+    FloatType divide(const DoubleType& rhs);
+
+    FloatType add(const IntType& rhs);
+    FloatType subtract(const IntType& rhs);
+    FloatType multiply(const IntType& rhs);
+    FloatType divide(const IntType& rhs);
+
+    float value;
 };
-
-float FloatType::add(float lhs, float rhs)
+// ======================================== Float primitive ==========
+FloatType FloatType::add(float rhs)
 {
-    return lhs + rhs;
+    value += rhs;
+    return *this;
 }
 
-float FloatType::subtract(float lhs, float rhs)
+FloatType FloatType::subtract(float rhs)
 {
-    return lhs - rhs;
+    value -= rhs;
+    return *this;
 }
 
-float FloatType::multiply(float lhs, float rhs)
+FloatType FloatType::multiply(float rhs)
 {
-    return lhs * rhs;
+    value *= rhs;
+    return *this;
 }
 
-float FloatType::divide(float lhs, float rhs)
+FloatType FloatType::divide(float rhs)
 {
     if (rhs == 0.0f)
         std::cout << "\nwarning, floating point division by zero returns 'inf' !" << std::endl;
-
-    return lhs / rhs;
+    value /= rhs;
+    return *this;
+}
+// ======================================== FloatType ==========
+FloatType FloatType::add(const FloatType& rhs)
+{
+    value += rhs.value;
+    return *this;
 }
 
+FloatType FloatType::subtract(const FloatType& rhs)
+{
+    value -= rhs.value;
+    return *this;
+}
+
+FloatType FloatType::multiply(const FloatType& rhs)
+{
+    value *= rhs.value;
+    return *this;
+}
+
+FloatType FloatType::divide(const FloatType& rhs)
+{
+    if (rhs.value == 0.0f)
+        std::cout << "\nwarning, floating point division by zero returns 'inf' !" << std::endl;
+    value /= rhs.value;
+    return *this;
+}
+// ======================================== DoubleType ==========
+FloatType FloatType::add(const DoubleType& rhs)
+{
+    value += rhs.value;
+    return *this;
+}
+
+FloatType FloatType::subtract(const DoubleType& rhs)
+{
+    value -= rhs.value;
+    return *this;
+}
+
+FloatType FloatType::multiply(const DoubleType& rhs)
+{
+    value *= rhs.value;
+    return *this;
+}
+
+FloatType FloatType::divide(const DoubleType& rhs)
+{
+    if (rhs.value == 0.0f)
+        std::cout << "\nwarning, floating point division by zero returns 'inf' !" << std::endl;
+    value /= rhs.value;
+    return *this;
+}
+// ======================================== IntType ==========
+FloatType FloatType::add(const IntType& rhs)
+{
+    value += rhs.value;
+    return *this;
+}
+
+FloatType FloatType::subtract(const IntType& rhs)
+{
+    value -= rhs.value;
+    return *this;
+}
+
+FloatType FloatType::multiply(const IntType& rhs)
+{
+    value *= rhs.value;
+    return *this;
+}
+
+FloatType FloatType::divide(const IntType& rhs)
+{
+    if (rhs.value == 0)
+    {
+        std::cout << "error, integer division by zero will crash the program!\nreturning this...\n" << std::endl;
+        return *this;
+    }
+    value /= rhs.value;
+    return *this;
+}
+// ============================================================
 struct DoubleType
 {
-    double add(double lhs, double rhs);
-    double subtract(double lhs, double rhs);
-    double multiply(double lhs, double rhs);
-    double divide(double lhs, double rhs);
+    DoubleType(double& double_) : value(double_) { }
+
+    DoubleType add(double lhs, double rhs);
+    DoubleType subtract(double lhs, double rhs);
+    DoubleType multiply(double lhs, double rhs);
+    DoubleType divide(double lhs, double rhs);
+
+    DoubleType add(const FloatType& rhs);
+    DoubleType subtract(const FloatType& rhs);
+    DoubleType multiply(const FloatType& rhs);
+    DoubleType divide(const FloatType& rhs);
+
+    DoubleType add(const DoubleType& rhs);
+    DoubleType subtract(const DoubleType& rhs);
+    DoubleType multiply(const DoubleType& rhs);
+    DoubleType divide(const DoubleType& rhs);
+
+    DoubleType add(const IntType& rhs);
+    DoubleType subtract(const IntType& rhs);
+    DoubleType multiply(const IntType& rhs);
+    DoubleType divide(const IntType& rhs);
+
+    double value;
 };
-
-double DoubleType::add(double lhs, double rhs)
+// ======================================== Double primitive ==========
+DoubleType DoubleType::add(double rhs)
 {
-    return lhs + rhs;
+    value += rhs;
+    return *this;
 }
 
-double DoubleType::subtract(double lhs, double rhs)
+DoubleType DoubleType::subtract(double rhs)
 {
-    return lhs - rhs;
+    value -= rhs;
+    return *this;
 }
 
-double DoubleType::multiply(double lhs, double rhs)
+DoubleType DoubleType::multiply(double rhs)
 {
-    return lhs * rhs;
+    value *= rhs;
+    return *this;
 }
 
-double DoubleType::divide(double lhs, double rhs)
+DoubleType DoubleType::divide(double rhs)
 {
     if (rhs == 0.0)
         std::cout << "\nwarning, floating point division by zero returns 'inf' !" << std::endl;
 
-    return lhs / rhs;
+    value /= rhs;
+    return *this;
+}
+// ======================================== FloatType ==========
+DoubleType DoubleType::add(const FloatType& rhs)
+{
+    value += rhs.value;
+    return *this;
 }
 
+DoubleType DoubleType::subtract(const FloatType& rhs)
+{
+    value -= rhs.value;
+    return *this;
+}
+
+DoubleType DoubleType::multiply(const FloatType& rhs)
+{
+    value *= rhs.value;
+    return *this;
+}
+
+DoubleType DoubleType::divide(const FloatType& rhs)
+{
+    if (rhs.value == 0.0)
+        std::cout << "\nwarning, floating point division by zero returns 'inf' !" << std::endl;
+
+    value /= rhs.value;
+    return *this;
+}
+// ======================================== DoubleType ==========
+DoubleType DoubleType::add(const DoubleType& rhs)
+{
+    value += rhs.value;
+    return *this;
+}
+
+DoubleType DoubleType::subtract(const DoubleType& rhs)
+{
+    value -= rhs.value;
+    return *this;
+}
+
+DoubleType DoubleType::multiply(const DoubleType& rhs)
+{
+    value *= rhs.value;
+    return *this;
+}
+
+DoubleType DoubleType::divide(const DoubleType& rhs)
+{
+    if (rhs.value == 0.0)
+        std::cout << "\nwarning, floating point division by zero returns 'inf' !" << std::endl;
+
+    value /= rhs.value;
+    return *this;
+}
+// ======================================== IntType ==========
+DoubleType DoubleType::add(const IntType& rhs)
+{
+    value += rhs.value;
+    return *this;
+}
+
+DoubleType DoubleType::subtract(const IntType& rhs)
+{
+    value -= rhs.value;
+    return *this;
+}
+
+DoubleType DoubleType::multiply(const IntType& rhs)
+{
+    value *= rhs.value;
+    return *this;
+}
+
+DoubleType DoubleType::divide(const IntType& rhs)
+{
+    if (rhs.value == 0)
+    {
+        std::cout << "error, integer division by zero will crash the program!\nreturning this...\n" << std::endl;
+        return *this;
+    }
+    value /= rhs.value;
+    return *this;
+}
+// ============================================================
 struct IntType
 {
-    int add(int lhs, int rhs);
-    int subtract(int lhs, int rhs);
-    int multiply(int lhs, int rhs);
-    int divide(int lhs, int rhs);
+    IntType(int& int_) : value(int_) { }
+
+    IntType add(int rhs);
+    IntType subtract(int rhs);
+    IntType multiply(int rhs);
+    IntType divide(int rhs);
+
+    IntType add(const FloatType& rhs);
+    IntType subtract(const FloatType& rhs);
+    IntType multiply(const FloatType& rhs);
+    IntType divide(const FloatType& rhs);
+
+    IntType add(const DoubleType& rhs);
+    IntType subtract(const DoubleType& rhs);
+    IntType multiply(const DoubleType& rhs);
+    IntType divide(const DoubleType& rhs);
+
+    IntType add(const IntType& rhs);
+    IntType subtract(const IntType& rhs);
+    IntType multiply(const IntType& rhs);
+    IntType divide(const IntType& rhs);
+
+    int value;
 };
-
-int IntType::add(int lhs, int rhs)
+// ======================================== Int primitive ==========
+IntType IntType::add(int rhs)
 {
-    return lhs + rhs;
+    value += rhs;
+    return *this;
 }
 
-int IntType::subtract(int lhs, int rhs)
+IntType IntType::subtract(int rhs)
 {
-    return lhs - rhs;
+    value += rhs;
+    return *this;
 }
 
-int IntType::multiply(int lhs, int rhs)
+IntType IntType::multiply(int rhs)
 {
-    return lhs * rhs;
+    value += rhs;
+    return *this;
 }
 
-int IntType::divide(int lhs, int rhs)
+IntType IntType::divide(int rhs)
 {
     if (rhs == 0)
     {
-        std::cout << "error, integer division by zero will crash the program!\nreturning lhs" << std::endl;
-        return lhs;
+        std::cout << "error, integer division by zero will crash the program!\nreturning this...\n" << std::endl;
+        return *this;
     }
+    value /= rhs;
+    return *this;
+}
+// ======================================== FloatType ==========
+IntType IntType::add(const FloatType& rhs)
+{
+    value += rhs.value;
+    return *this;
+}
 
-    
-    return lhs / rhs;
+IntType IntType::subtract(const FloatType& rhs)
+{
+    value -= rhs.value;
+    return *this;
+}
+
+IntType IntType::multiply(const FloatType& rhs)
+{
+    value *= rhs.value;
+    return *this;
+}
+
+IntType IntType::divide(const FloatType& rhs)
+{
+    if (rhs.value== 0.0)
+        std::cout << "\nwarning, floating point division by zero returns 'inf' !" << std::endl;
+
+    value /= rhs.value;
+    return *this;
+}
+// ======================================== DoubleType ==========
+IntType IntType::add(const DoubleType& rhs)
+{
+    value += rhs.value;
+    return *this;
+}
+
+IntType IntType::subtract(const DoubleType& rhs)
+{
+    value -= rhs.value;
+    return *this;
+}
+
+IntType IntType::multiply(const DoubleType& rhs)
+{
+    value *= rhs.value;
+    return *this;
+}
+
+IntType IntType::divide(const DoubleType& rhs)
+{
+    if (rhs.value == 0.0)
+        std::cout << "\nwarning, floating point division by zero returns 'inf' !" << std::endl;
+
+    value /= rhs.value;
+    return *this;
+}
+// ======================================== IntType ==========
+IntType IntType::add(const IntType& rhs)
+{
+    value += rhs.value;
+    return *this;
+}
+
+IntType IntType::subtract(const IntType& rhs)
+{
+    value -= rhs.value;
+    return *this;
+}
+
+IntType IntType::multiply(const IntType& rhs)
+{
+    value *= rhs.value;
+    return *this;
+}
+
+IntType IntType::divide(const IntType& rhs)
+{
+    if (rhs.value == 0)
+    {
+        std::cout << "error, integer division by zero will crash the program!\nreturning this...\n" << std::endl;
+        return *this;
+    }
+    value /= rhs.value;
+    return *this;
 }
 //================================================================================
 int main() 
