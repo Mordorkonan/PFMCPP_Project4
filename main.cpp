@@ -180,6 +180,9 @@ int main()
  */
 
 #include <iostream>
+struct FloatType;
+struct DoubleType;
+struct IntType;
 
 struct FloatType
 {
@@ -319,10 +322,10 @@ struct DoubleType
 {
     DoubleType(double& double_) : value(double_) { }
 
-    DoubleType add(double lhs, double rhs);
-    DoubleType subtract(double lhs, double rhs);
-    DoubleType multiply(double lhs, double rhs);
-    DoubleType divide(double lhs, double rhs);
+    DoubleType add(double rhs);
+    DoubleType subtract(double rhs);
+    DoubleType multiply(double rhs);
+    DoubleType divide(double rhs);
 
     DoubleType add(const FloatType& rhs);
     DoubleType subtract(const FloatType& rhs);
