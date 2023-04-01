@@ -323,73 +323,73 @@ FloatType& FloatType::divide(const FloatType& rhs)
 // ======================================== FloatType - DoubleType ==========
 FloatType& FloatType::add(const DoubleType& rhs)
 {
-    *this = add(*rhs.value);
+    *value += *rhs.value;
     return *this;
 }
 
 FloatType& FloatType::subtract(const DoubleType& rhs)
 {
-    *this = subtract(*rhs.value);
+    *value -= *rhs.value;
     return *this;
 }
 
 FloatType& FloatType::multiply(const DoubleType& rhs)
 {
-    *this = multiply(*rhs.value);
+    *value *= *rhs.value;
     return *this;
 }
 
 FloatType& FloatType::divide(const DoubleType& rhs)
 {
-    *this = divide(*rhs.value);
+    *value /= *rhs.value;
     return *this;
 }
 // ======================================== FloatType - IntType ==========
 FloatType& FloatType::add(const IntType& rhs)
 {
-    *this = add(*rhs.value);
+    *value += *rhs.value;
     return *this;
 }
 
 FloatType& FloatType::subtract(const IntType& rhs)
 {
-    *this = subtract(*rhs.value);
+    *value -= *rhs.value;
     return *this;
 }
 
 FloatType& FloatType::multiply(const IntType& rhs)
 {
-    *this = multiply(*rhs.value);
+    *value *= *rhs.value;
     return *this;
 }
 
 FloatType& FloatType::divide(const IntType& rhs)
 {
-    *this = divide(*rhs.value);
+    *value /= *rhs.value;
     return *this;
 }
 // ======================================== DoubleType - FloatType ==========
 DoubleType& DoubleType::add(const FloatType& rhs)
 {
-    *this = add(*rhs.value);
+    *value += *rhs.value;
     return *this;
 }
 
 DoubleType& DoubleType::subtract(const FloatType& rhs)
 {
-    *this = subtract(*rhs.value);
+    *value -= *rhs.value;
     return *this;
 }
 
 DoubleType& DoubleType::multiply(const FloatType& rhs)
 {
-    *this = multiply(*rhs.value);
+    *value *= *rhs.value;
     return *this;
 }
 
 DoubleType& DoubleType::divide(const FloatType& rhs)
 {
-    *this = divide(*rhs.value);
+    *value /= *rhs.value;
     return *this;
 }
 // ======================================== DoubleType - DoubleType ==========
@@ -422,74 +422,74 @@ DoubleType& DoubleType::divide(const DoubleType& rhs)
 // ======================================== DoubleType - IntType ==========
 DoubleType& DoubleType::add(const IntType& rhs)
 {
-    *this = add(*rhs.value);
+    *value += *rhs.value;
     return *this;
 }
 
 DoubleType& DoubleType::subtract(const IntType& rhs)
 {
-    *this = subtract(*rhs.value);
+    *value -= *rhs.value;
     return *this;
 }
 
 DoubleType& DoubleType::multiply(const IntType& rhs)
 {
-    *this = multiply(*rhs.value);
+    *value *= *rhs.value;
     return *this;
 }
 
 DoubleType& DoubleType::divide(const IntType& rhs)
 {
-    *this = divide(*rhs.value);
+    *value /= *rhs.value;
     return *this;
 }
 
 // ======================================== IntType - FloatType ==========
 IntType& IntType::add(const FloatType& rhs)
 {
-    *this = add(*rhs.value);
+    *value += *rhs.value;
     return *this;
 }
 
 IntType& IntType::subtract(const FloatType& rhs)
 {
-    *this = subtract(*rhs.value);
+    *value -= *rhs.value;
     return *this;
 }
 
 IntType& IntType::multiply(const FloatType& rhs)
 {
-    *this = multiply(*rhs.value);
+    *value *= *rhs.value;
     return *this;
 }
 
 IntType& IntType::divide(const FloatType& rhs)
 {
-    *this = divide(*rhs.value);
+    *value /= *rhs.value;
     return *this;
 }
 // ======================================== IntType - DoubleType ==========
 IntType& IntType::add(const DoubleType& rhs)
 {
-    *this = add(*rhs.value);
+    *value += *rhs.value;
     return *this;
 }
 
 IntType& IntType::subtract(const DoubleType& rhs)
 {
-    *this = subtract(*rhs.value);
+    *value -= *rhs.value;
     return *this;
 }
 
 IntType& IntType::multiply(const DoubleType& rhs)
 {
-    *this = multiply(*rhs.value);
+    *value *= *rhs.value;
     return *this;
 }
 
 IntType& IntType::divide(const DoubleType& rhs)
 {
-    *this = divide(*rhs.value);
+    *value /= *rhs.value;
     return *this;
 }
 // ======================================== IntType - IntType ==========
