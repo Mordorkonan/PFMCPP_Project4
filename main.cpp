@@ -14,11 +14,12 @@ New/This/Pointers/References conclusion
          on the heap without leaking, without using smart pointers. 
  */
 struct HeapA;
-struct A { A(HeapA& heapA_) : heapA(heapA_) { } HeapA& heapA; };
+struct A { };
 struct HeapA
 {
-    HeapA() : a(*this) { }
-    A a;
+    HeapA() : a(new A()) { }
+    ~HeapA() { delete a; }
+    A* a = nullptr;
 };
 
 
@@ -132,7 +133,7 @@ struct IntType;
 struct FloatType
 {
     FloatType(float float_) : value(new float(float_)) { std::cout << "FloatType value is " << *value << std::endl; }
-    //~FloatType() { delete value; }
+    ~FloatType() { delete value; }
 
     FloatType& add(float rhs);
     FloatType& subtract(float rhs);
@@ -160,7 +161,7 @@ struct FloatType
 struct DoubleType
 {
     DoubleType(double double_) : value(new double(double_)) { std::cout << "DoubleType value is " << *value << std::endl; }
-    //~DoubleType() { delete value; }
+    ~DoubleType() { delete value; }
 
     DoubleType& add(double rhs);
     DoubleType& subtract(double rhs);
@@ -188,7 +189,7 @@ struct DoubleType
 struct IntType
 {
     IntType(int int_) : value(new int(int_)) { std::cout << "IntType value is " << *value << std::endl; }
-    //~IntType() { delete value; }
+    ~IntType() { delete value; }
 
     IntType& add(int rhs);
     IntType& subtract(int rhs);
@@ -529,7 +530,7 @@ int main()
     //assign heap primitives
     FloatType ft ( 2.0f );
     DoubleType dt ( 2 );
-    IntType it ( 2 ) ;
+    IntType it ( 2 );
 
     std::cout << "FloatType add result=" << *ft.add( 2.0f ).value << std::endl;
     std::cout << "FloatType subtract result=" << *ft.subtract( 2.0f ).value << std::endl;
