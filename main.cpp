@@ -132,7 +132,7 @@ struct IntType;
 
 struct FloatType
 {
-    FloatType(float float_) : value(new float(float_)) { std::cout << "FloatType value is " << *value << std::endl; }
+    FloatType(float float_) : value(new float(float_)) { }
     ~FloatType() { delete value; }
 
     FloatType& add(float rhs);
@@ -160,7 +160,7 @@ struct FloatType
 // ============================================================
 struct DoubleType
 {
-    DoubleType(double double_) : value(new double(double_)) { std::cout << "DoubleType value is " << *value << std::endl; }
+    DoubleType(double double_) : value(new double(double_)) { }
     ~DoubleType() { delete value; }
 
     DoubleType& add(double rhs);
@@ -188,7 +188,7 @@ struct DoubleType
 // ============================================================
 struct IntType
 {
-    IntType(int int_) : value(new int(int_)) { std::cout << "IntType value is " << *value << std::endl; }
+    IntType(int int_) : value(new int(int_)) { }
     ~IntType() { delete value; }
 
     IntType& add(int rhs);
