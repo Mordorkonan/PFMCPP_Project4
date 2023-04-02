@@ -13,7 +13,6 @@ New/This/Pointers/References conclusion
      on the lines below it, write a struct named 'HeapA' that correctly shows how to own an instance of 'A' 
          on the heap without leaking, without using smart pointers. 
  */
-struct HeapA;
 struct A { };
 struct HeapA
 {
@@ -126,7 +125,6 @@ good to go!
 
 #include <iostream>
 
-struct FloatType;
 struct DoubleType;
 struct IntType;
 
@@ -289,9 +287,11 @@ IntType& IntType::divide(int rhs)
     if (rhs == 0)
     {
         std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
-        return *this;
     }
-    *value /=  rhs;
+    else
+    {
+        *value /=  rhs;        
+    }
     return *this;
 }
 // ======================================== FloatType - FloatType ==========
