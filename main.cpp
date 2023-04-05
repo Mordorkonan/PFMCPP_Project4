@@ -194,7 +194,7 @@ FloatType& FloatType::divide(float rhs)
     return *this;
 }
 
-FloatType::operator float() const { return *FloatType::value; }
+FloatType::operator float() const { return *value; }
 // ======================================== Double primitive ==========
 DoubleType& DoubleType::add(double rhs)
 {
@@ -223,7 +223,7 @@ DoubleType& DoubleType::divide(double rhs)
     return *this;        
 }
 
-DoubleType::operator double() const { return *DoubleType::value; }
+DoubleType::operator double() const { return *value; }
 // ======================================== Int primitive ==========
 IntType& IntType::add(int rhs)
 {
@@ -256,7 +256,7 @@ IntType& IntType::divide(int rhs)
     return *this;
 }
 
-IntType::operator int() const { return *IntType::value; }
+IntType::operator int() const { return *value; }
 
 void part3()
 {
