@@ -329,7 +329,7 @@ int main()
 
     part3();
     
-    // std::cout << "good to go!\n";
+    std::cout << "good to go!\n";
     
-    // return 0;
+    return 0;
 }
