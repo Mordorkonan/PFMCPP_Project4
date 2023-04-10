@@ -54,7 +54,7 @@ Project 4: Part 4 / 9
  */
 
 
-
+/*
 struct Point
 {
     Point& multiply(float m)
@@ -150,7 +150,7 @@ void part4()
     p3.toString();   
     std::cout << "---------------------\n" << std::endl;
 }
-
+*/
 /*
 your program should generate the following output EXACTLY.
 This includes the warnings.  
@@ -281,6 +281,7 @@ struct HeapA
  */
 
 #include <iostream>
+#include <cmath>
 
 struct DoubleType;
 struct IntType;
@@ -296,7 +297,14 @@ struct FloatType
     FloatType& multiply(float rhs);
     FloatType& divide(float rhs);
 
+    FloatType& pow(float rhs);
+    FloatType& pow(const FloatType& rhs);
+    FloatType& pow(const DoubleType& rhs);
+    FloatType& pow(const IntType& rhs);
+
 private:
+    FloatType& powInternal(float* base, float exp);
+
     float* value = nullptr;
 };
 // ============================================================
@@ -311,7 +319,14 @@ struct DoubleType
     DoubleType& multiply(double rhs);
     DoubleType& divide(double rhs);
 
+    DoubleType& pow(double rhs);
+    DoubleType& pow(const FloatType& rhs);
+    DoubleType& pow(const DoubleType& rhs);
+    DoubleType& pow(const IntType& rhs);
+
 private:
+    DoubleType& powInternal(double* base, double exp);
+
     double* value = nullptr;
 };
 // ============================================================
@@ -326,7 +341,14 @@ struct IntType
     IntType& multiply(int rhs);
     IntType& divide(int rhs);
 
+    IntType& pow(int rhs);
+    IntType& pow(const FloatType& rhs);
+    IntType& pow(const DoubleType& rhs);
+    IntType& pow(const IntType& rhs);
+
 private:
+    IntType& powInternal(int* base, int exp);
+
     int* value = nullptr;
 };
 // ======================================== Float primitive ==========
@@ -419,7 +441,94 @@ IntType& IntType::divide(int rhs)
 }
 
 IntType::operator int() const { return *value; }
+// ======================================== FloatType pow / powInternal ==========
+FloatType& FloatType::pow(float rhs)
+{
+    powInternal(value, rhs);
+    return *this;
+}
 
+FloatType& FloatType::pow(const FloatType& rhs)
+{
+    powInternal(value, static_cast<float>(rhs));
+    return *this;
+}
+
+FloatType& FloatType::pow(const DoubleType& rhs)
+{
+    powInternal(value, static_cast<float>(rhs));
+    return *this;
+}
+FloatType& FloatType::pow(const IntType& rhs)
+{
+    powInternal(value, static_cast<float>(rhs));
+    return *this;
+}
+
+FloatType& FloatType::powInternal(float* base, float exp)
+{
+    *value = std::pow(*base, exp);
+    return *this;
+}
+// ======================================== DoubleType pow / powInternal ==========
+DoubleType& DoubleType::pow(double rhs)
+{
+    powInternal(value, rhs);
+    return *this;
+}
+
+DoubleType& DoubleType::pow(const FloatType& rhs)
+{
+    powInternal(value, static_cast<double>(rhs));
+    return *this;
+}
+
+DoubleType& DoubleType::pow(const DoubleType& rhs)
+{
+    powInternal(value, static_cast<double>(rhs));
+    return *this;
+}
+DoubleType& DoubleType::pow(const IntType& rhs)
+{
+    powInternal(value, static_cast<double>(rhs));
+    return *this;
+}
+
+DoubleType& DoubleType::powInternal(double* base, double exp)
+{
+    *value = std::pow(*base, exp);
+    return *this;
+}
+// ======================================== IntType pow / powInternal ==========
+IntType& IntType::pow(int rhs)
+{
+    powInternal(value, rhs);
+    return *this;
+}
+
+IntType& IntType::pow(const FloatType& rhs)
+{
+    powInternal(value, static_cast<int>(rhs));
+    return *this;
+}
+
+IntType& IntType::pow(const DoubleType& rhs)
+{
+    powInternal(value, static_cast<int>(rhs));
+    return *this;
+}
+IntType& IntType::pow(const IntType& rhs)
+{
+    powInternal(value, static_cast<int>(rhs));
+    return *this;
+}
+
+IntType& IntType::powInternal(int* base, int exp)
+{
+    *value = static_cast<int>(std::pow(*base, exp));
+    return *this;
+}
+//================================================================================
 void part3()
 {
     FloatType ft( 5.5f );
