@@ -451,10 +451,10 @@ void part3()
 //================================================================================
 struct Point
 {
-    Point(float x_, float y_) : x(x_), y(y_) { }
-    Point(const FloatType& x, const FloatType& y) : x(static_cast<float>(x)), y(static_cast<float>(y)) { }
-    Point(const DoubleType& x, const DoubleType& y) : x(static_cast<float>(x)), y(static_cast<float>(y)) { }
-    Point(const IntType& x, const IntType& y) : x(static_cast<float>(x)), y(static_cast<float>(y)) { }
+    explicit Point(float x_, float y_) : x(x_), y(y_) { }
+    explicit Point(const FloatType& x_, const FloatType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
+    explicit Point(const DoubleType& x_, const DoubleType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
+    explicit Point(const IntType& x_, const IntType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
 
     void toString() const { std::cout << "x = " << x << "\ny = " << y << std::endl; }
 
