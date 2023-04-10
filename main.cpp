@@ -191,7 +191,7 @@ struct IntType;
 
 struct FloatType
 {
-    FloatType(float float_) : value(new float(float_)) { }
+    explicit FloatType(float float_) : value(new float(float_)) { }
     ~FloatType() { delete value; }
     operator float() const;
 
@@ -213,7 +213,7 @@ private:
 // ============================================================
 struct DoubleType
 {
-    DoubleType(double double_) : value(new double(double_)) { }
+    explicit DoubleType(double double_) : value(new double(double_)) { }
     ~DoubleType() { delete value; }
     operator double() const;
 
@@ -235,7 +235,7 @@ private:
 // ============================================================
 struct IntType
 {
-    IntType(int int_) : value(new int(int_)) { }
+    explicit IntType(int int_) : value(new int(int_)) { }
     ~IntType() { delete value; }
     operator int() const;
 
@@ -451,12 +451,12 @@ void part3()
 //================================================================================
 struct Point
 {
-    explicit Point(float x_, float y_) : x(x_), y(y_) { }
-    explicit Point(const FloatType& x_, const FloatType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
-    explicit Point(const DoubleType& x_, const DoubleType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
-    explicit Point(const IntType& x_, const IntType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
+    Point(float x_, float y_) : x(x_), y(y_) { }
+    Point(const FloatType& x_, const FloatType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
+    Point(const DoubleType& x_, const DoubleType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
+    Point(const IntType& x_, const IntType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
 
-    void toString() const { std::cout << "x = " << x << "\ny = " << y << std::endl; }
+    void toString() const { std::cout << "Point { x: " << x << ", y: " << y << " }" << std::endl; }
 
     Point& multiply(float m)
     {
@@ -502,7 +502,7 @@ void part4()
     DoubleType dtExp(2.0);
     
     // Power tests with FloatType
-    std::cout << "Power tests with FloatType" << std::endl;
+    std::cout << "Power tests with FloatType " << std::endl;
     std::cout << "pow(ft1, floatExp) = " << ft1 << "^" << floatExp << " = " << ft1.pow(floatExp)  << std::endl;
     std::cout << "pow(ft1, itExp) = " << ft1 << "^" << itExp << " = " << ft1.pow(itExp)  << std::endl;
     std::cout << "pow(ft1, ftExp) = " << ft1 << "^" << ftExp << " = " << ft1.pow(ftExp)  << std::endl;    
@@ -510,7 +510,7 @@ void part4()
     std::cout << "---------------------\n" << std::endl;  
 
     // Power tests with DoubleType
-    std::cout << "Power tests with DoubleType" << std::endl;
+    std::cout << "Power tests with DoubleType " << std::endl;
     std::cout << "pow(dt1, doubleExp) = " << dt1 << "^" << doubleExp << " = " << dt1.pow(intExp)  << std::endl;
     std::cout << "pow(dt1, itExp) = " << dt1 << "^" << itExp << " = " << dt1.pow(itExp)  << std::endl;
     std::cout << "pow(dt1, ftExp) = " << dt1 << "^" << ftExp << " = " << dt1.pow(ftExp)  << std::endl;    
@@ -518,7 +518,7 @@ void part4()
     std::cout << "---------------------\n" << std::endl;    
 
     // Power tests with IntType
-    std::cout << "Power tests with IntType" << std::endl;
+    std::cout << "Power tests with IntType " << std::endl;
     std::cout << "pow(it1, intExp) = " << it1 << "^" << intExp << " = " << it1.pow(intExp)  << std::endl;
     std::cout << "pow(it1, itExp) = " << it1 << "^" << itExp << " = " << it1.pow(itExp)  << std::endl;
     std::cout << "pow(it1, ftExp) = " << it1 << "^" << ftExp << " = " << it1.pow(ftExp)  << std::endl;    
@@ -624,6 +624,8 @@ int main()
     std::cout << "---------------------\n" << std::endl; 
 
     part3();
+
+    part4();
     
     std::cout << "good to go!\n";
     
