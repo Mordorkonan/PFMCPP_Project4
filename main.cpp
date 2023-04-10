@@ -186,8 +186,8 @@ struct HeapA
 #include <iostream>
 #include <cmath>
 
-// struct DoubleType;
-// struct IntType;
+struct DoubleType;
+struct IntType;
 
 struct FloatType
 {
@@ -455,10 +455,31 @@ struct Point
     Point(const FloatType& x, const FloatType& y) : x(static_cast<float>(x)), y(static_cast<float>(y)) { }
     Point(const DoubleType& x, const DoubleType& y) : x(static_cast<float>(x)), y(static_cast<float>(y)) { }
     Point(const IntType& x, const IntType& y) : x(static_cast<float>(x)), y(static_cast<float>(y)) { }
+
+    void toString() const { std::cout << "x = " << x << "\ny = " << y << std::endl; }
+
     Point& multiply(float m)
     {
         x *= m;
         y *= m;
+        return *this;
+    }
+
+    Point& multiply(const FloatType& m)
+    {
+        multiply(static_cast<float>(m));
+        return *this;
+    }
+
+    Point& multiply(const DoubleType& m)
+    {
+        multiply(static_cast<float>(m));
+        return *this;
+    }
+
+    Point& multiply(const IntType& m)
+    {
+        multiply(static_cast<float>(m));
         return *this;
     }
 private:
