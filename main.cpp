@@ -206,7 +206,7 @@ struct FloatType
     FloatType& pow(const IntType& rhs);
 
 private:
-    FloatType& powInternal(float* base, float exp);
+    FloatType& powInternal(float exp);
 
     float* value = nullptr;
 };
@@ -228,7 +228,7 @@ struct DoubleType
     DoubleType& pow(const IntType& rhs);
 
 private:
-    DoubleType& powInternal(double* base, double exp);
+    DoubleType& powInternal(double exp);
 
     double* value = nullptr;
 };
@@ -250,7 +250,7 @@ struct IntType
     IntType& pow(const IntType& rhs);
 
 private:
-    IntType& powInternal(int* base, int exp);
+    IntType& powInternal(int exp);
 
     int* value = nullptr;
 };
@@ -347,88 +347,88 @@ IntType::operator int() const { return *value; }
 // ======================================== FloatType pow / powInternal ==========
 FloatType& FloatType::pow(float rhs)
 {
-    powInternal(value, rhs);
+    powInternal(rhs);
     return *this;
 }
 
 FloatType& FloatType::pow(const FloatType& rhs)
 {
-    powInternal(value, static_cast<float>(rhs));
+    powInternal(static_cast<float>(rhs));
     return *this;
 }
 
 FloatType& FloatType::pow(const DoubleType& rhs)
 {
-    powInternal(value, static_cast<float>(rhs));
+    powInternal(static_cast<float>(rhs));
     return *this;
 }
 FloatType& FloatType::pow(const IntType& rhs)
 {
-    powInternal(value, static_cast<float>(rhs));
+    powInternal(static_cast<float>(rhs));
     return *this;
 }
 
-FloatType& FloatType::powInternal(float* base, float exp)
+FloatType& FloatType::powInternal(float exp)
 {
-    *value = std::pow(*base, exp);
+    *value = std::pow(*value, exp);
     return *this;
 }
 // ======================================== DoubleType pow / powInternal ==========
 DoubleType& DoubleType::pow(double rhs)
 {
-    powInternal(value, rhs);
+    powInternal(rhs);
     return *this;
 }
 
 DoubleType& DoubleType::pow(const FloatType& rhs)
 {
-    powInternal(value, static_cast<double>(rhs));
+    powInternal(static_cast<double>(rhs));
     return *this;
 }
 
 DoubleType& DoubleType::pow(const DoubleType& rhs)
 {
-    powInternal(value, static_cast<double>(rhs));
+    powInternal(static_cast<double>(rhs));
     return *this;
 }
 DoubleType& DoubleType::pow(const IntType& rhs)
 {
-    powInternal(value, static_cast<double>(rhs));
+    powInternal(static_cast<double>(rhs));
     return *this;
 }
 
-DoubleType& DoubleType::powInternal(double* base, double exp)
+DoubleType& DoubleType::powInternal(double exp)
 {
-    *value = std::pow(*base, exp);
+    *value = std::pow(*value, exp);
     return *this;
 }
 // ======================================== IntType pow / powInternal ==========
 IntType& IntType::pow(int rhs)
 {
-    powInternal(value, rhs);
+    powInternal(rhs);
     return *this;
 }
 
 IntType& IntType::pow(const FloatType& rhs)
 {
-    powInternal(value, static_cast<int>(rhs));
+    powInternal(static_cast<int>(rhs));
     return *this;
 }
 
 IntType& IntType::pow(const DoubleType& rhs)
 {
-    powInternal(value, static_cast<int>(rhs));
+    powInternal(static_cast<int>(rhs));
     return *this;
 }
 IntType& IntType::pow(const IntType& rhs)
 {
-    powInternal(value, static_cast<int>(rhs));
+    powInternal(static_cast<int>(rhs));
     return *this;
 }
 
-IntType& IntType::powInternal(int* base, int exp)
+IntType& IntType::powInternal(int exp)
 {
-    *value = static_cast<int>(std::pow(*base, exp));
+    *value = static_cast<int>(std::pow(*value, exp));
     return *this;
 }
 //================================================================================
