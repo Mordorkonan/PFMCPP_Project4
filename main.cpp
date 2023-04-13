@@ -26,7 +26,7 @@ Do not delete your previous main.
      
  5) delete the example below after it makes sense how your code will change due to 1).
  */
-
+/*
 #include <iostream>
 namespace Example
 {
@@ -35,14 +35,14 @@ namespace Example
         FloatType floatNum(4.3f);
         IntType intNum(2);
         IntType intNum2(6);
-
+*/
         /* 
         if you previously had a line like this demonstrating chaining:
             
             intNum.add(3).add(4.5f).divide(floatNum); 
 
         it should become:
-        */
+        *//*
         intNum += 3;
         intNum += 4.5f;
         intNum /= floatNum;
@@ -51,7 +51,7 @@ namespace Example
         return 0;
     }
 }
-
+*/
  /*
  6) compile/link/run to make sure you don't have any errors or warnings.
 
@@ -201,6 +201,10 @@ struct FloatType
     explicit FloatType(float float_) : value(new float(float_)) { }
     ~FloatType() { delete value; }
     operator float() const;
+    FloatType& operator+=(float rhs);
+    FloatType& operator-=(float rhs);
+    FloatType& operator*=(float rhs);
+    FloatType& operator/=(float rhs);
 
     FloatType& add(float rhs);
     FloatType& subtract(float rhs);
@@ -223,6 +227,10 @@ struct DoubleType
     explicit DoubleType(double double_) : value(new double(double_)) { }
     ~DoubleType() { delete value; }
     operator double() const;
+    DoubleType& operator+=(double rhs);
+    DoubleType& operator-=(double rhs);
+    DoubleType& operator*=(double rhs);
+    DoubleType& operator/=(double rhs);
 
     DoubleType& add(double rhs);
     DoubleType& subtract(double rhs);
@@ -245,6 +253,10 @@ struct IntType
     explicit IntType(int int_) : value(new int(int_)) { }
     ~IntType() { delete value; }
     operator int() const;
+    IntType& operator+=(int rhs);
+    IntType& operator-=(int rhs);
+    IntType& operator*=(int rhs);
+    IntType& operator/=(int rhs);
 
     IntType& add(int rhs);
     IntType& subtract(int rhs);
@@ -289,6 +301,32 @@ FloatType& FloatType::divide(float rhs)
 }
 
 FloatType::operator float() const { return *value; }
+
+FloatType& FloatType::operator+=(float rhs)
+{
+    *value += rhs;
+    return *this;
+}
+
+FloatType& FloatType::operator-=(float rhs)
+{
+    *value -= rhs;
+    return *this;
+}
+
+FloatType& FloatType::operator*=(float rhs)
+{
+    *value *= rhs;
+    return *this;
+}
+
+FloatType& FloatType::operator/=(float rhs)
+{
+    if (rhs == 0.0f)
+        std::cout << "warning: floating point division by zero!" << std::endl;
+    *value /= rhs;
+    return *this;
+}
 // ======================================== Double primitive ==========
 DoubleType& DoubleType::add(double rhs)
 {
@@ -318,6 +356,33 @@ DoubleType& DoubleType::divide(double rhs)
 }
 
 DoubleType::operator double() const { return *value; }
+
+DoubleType& DoubleType::operator+=(double rhs)
+{
+    *value += rhs;
+    return *this;
+}
+
+DoubleType& DoubleType::operator-=(double rhs)
+{
+    *value -= rhs;
+    return *this;
+}
+
+DoubleType& DoubleType::operator*=(double rhs)
+{
+    *value *= rhs;
+    return *this;
+}
+
+DoubleType& DoubleType::operator/=(double rhs)
+{
+    if (rhs == 0.0)
+        std::cout << "warning: floating point division by zero!" << std::endl;
+
+    *value /= rhs;
+    return *this;        
+}
 // ======================================== Int primitive ==========
 IntType& IntType::add(int rhs)
 {
@@ -351,6 +416,37 @@ IntType& IntType::divide(int rhs)
 }
 
 IntType::operator int() const { return *value; }
+
+IntType& IntType::operator+=(int rhs)
+{
+    *value += rhs;
+    return *this;
+}
+
+IntType& IntType::operator-=(int rhs)
+{
+    *value -= rhs;
+    return *this;
+}
+
+IntType& IntType::operator*=(int rhs)
+{
+    *value *= rhs;
+    return *this;
+}
+
+IntType& IntType::operator/=(int rhs)
+{
+    if (rhs == 0)
+    {
+        std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
+    }
+    else
+    {
+        *value /=  rhs;        
+    }
+    return *this;
+}
 // ======================================== FloatType pow / powInternal ==========
 FloatType& FloatType::pow(float rhs)
 {
