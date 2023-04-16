@@ -297,135 +297,102 @@ struct Numeric
 
     explicit Numeric(Type type_) : value(std::make_unique<Type>(type_)) { }
     ~Numeric() { value.reset(nullptr); }
-    operator NumType() const;
-    Numeric& operator+=(Type rhs);
-    Numeric& operator-=(Type rhs);
-    Numeric& operator*=(Type rhs);
-    Numeric& operator/=(Type rhs);
-    
+    //========== operators ==========
+    operator Type() const { return *value; }
 
-    Numeric& add(Type rhs);
-    Numeric& subtract(Type rhs);
-    Numeric& multiply(Type rhs);
-    Numeric& divide(Type rhs);
+    Numeric<Type>& operator+=(Type rhs)
+    {
+        *value += rhs;
+        return *this;
+    }
 
-    Numeric& pow(Type rhs);
-    Numeric& pow(const Numeric& rhs);
+    Numeric<Type>& operator-=(Type rhs)
+    {
+        *value -= rhs;
+        return *this;
+    }
 
-    Numeric& apply(std::function<Numeric&(Type&)> f);
-    Numeric& apply(void (*f)(Type&));
+    Numeric<Type>& operator*=(Type rhs)
+    {
+        *value *= rhs;
+        return *this;
+    }
+
+    Numeric<Type>& operator/=(Type rhs)
+    {
+        if (rhs == 0.0f)
+            std::cout << "warning: floating point division by zero!" << std::endl;
+        *value /= rhs;
+        return *this;
+    }  
+    //========== arithmetic assignment functions ==========
+    Numeric<Type>& add(Type rhs)
+    {
+        *value += rhs;
+        return *this;
+    }
+
+    Numeric<Type>& subtract(Type rhs)
+    {
+        *value -= rhs;
+        return *this;
+    }
+
+    Numeric<Type>& multiply(Type rhs)
+    {
+        *value *= rhs;
+        return *this;
+    }
+
+    Numeric<Type>& divide(Type rhs)
+    {
+        if (rhs == 0.0f)
+            std::cout << "warning: floating point division by zero!" << std::endl;
+        *value /= rhs;
+        return *this;
+    }
+    //========== other functions ==========
+    Numeric<Type>& pow(Type rhs)
+    {
+        powInternal(rhs);
+        return *this;
+    }
+
+    Numeric<Type>& pow(const Numeric<Type>& rhs)
+    {
+        powInternal(static_cast<Type>(rhs));
+        return *this;
+    }
+
+    Numeric<Type>& apply(std::function<Numeric<Type>&(Type&)> f)
+    {
+        if (f)
+        {
+            return f(*value);
+        }
+        
+        return *this;
+    }
+
+    Numeric<Type>& apply(void (*f)(Type&))
+    {
+        if (f)
+        {
+            f(*value);
+        }
+        
+        return *this;
+    }
 
 private:
-    Numeric& powInternal(Type exp);
+    Numeric<Type>& powInternal(Type exp)
+    {
+        *value = std::pow(*value, exp);
+        return *this;
+    }
 
     std::unique_ptr<Type> value { nullptr };
 };
-// ======================================== Float primitive ==========
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::add(NumType rhs)
-{
-    *value += rhs;
-    return *this;
-}
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::subtract(NumType rhs)
-{
-    *value -= rhs;
-    return *this;
-}
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::multiply(NumType rhs)
-{
-    *value *= rhs;
-    return *this;
-}
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::divide(NumType rhs)
-{
-    if (rhs == 0.0f)
-        std::cout << "warning: floating point division by zero!" << std::endl;
-    *value /= rhs;
-    return *this;
-}
-// ======================================== Float operators ===========
-template <typename NumType>
-Numeric<NumType>::operator NumType() const { return *value; }
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::operator+=(NumType rhs)
-{
-    *value += rhs;
-    return *this;
-}
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::operator-=(NumType rhs)
-{
-    *value -= rhs;
-    return *this;
-}
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::operator*=(NumType rhs)
-{
-    *value *= rhs;
-    return *this;
-}
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::operator/=(NumType rhs)
-{
-    if (rhs == 0.0f)
-        std::cout << "warning: floating point division by zero!" << std::endl;
-    *value /= rhs;
-    return *this;
-}
-// ======================================== Float Apply func ==========
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::apply(std::function<Numeric<NumType>&(NumType&)> f)
-{
-    if (f)
-    {
-        return f(*value);
-    }
-    
-    return *this;
-}
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::apply(void (*f)(NumType&))
-{
-    if (f)
-    {
-        f(*value);
-    }
-    
-    return *this;
-}
-// ======================================== FloatType pow / powInternal ==========
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::pow(NumType rhs)
-{
-    powInternal(rhs);
-    return *this;
-}
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::pow(const Numeric<NumType>& rhs)
-{
-    powInternal(static_cast<NumType>(rhs));
-    return *this;
-}
-
-template <typename NumType>
-Numeric<NumType>& Numeric<NumType>::powInternal(NumType exp)
-{
-    *value = std::pow(*value, exp);
-    return *this;
-}
 //===================================== Free Functions ===========================
 void myFloatFreeFunct(float& v) { v += 7.0f; }
 
