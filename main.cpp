@@ -320,34 +320,8 @@ struct Numeric
         return *this;
     }
 
-    Numeric<Type>& operator/=(Type rhs)
-    {
-        if (rhs == 0.0f)
-            std::cout << "warning: floating point division by zero!" << std::endl;
-        *value /= rhs;
-        return *this;
-    }  
-    //========== arithmetic assignment functions ==========
-    Numeric<Type>& add(Type rhs)
-    {
-        *value += rhs;
-        return *this;
-    }
-
-    Numeric<Type>& subtract(Type rhs)
-    {
-        *value -= rhs;
-        return *this;
-    }
-
-    Numeric<Type>& multiply(Type rhs)
-    {
-        *value *= rhs;
-        return *this;
-    }
-
     template <typename ArgumentType>
-    Numeric<Type>& divide(ArgumentType rhs)
+    Numeric<Type>& operator/=(Type rhs)
     {
         if constexpr (std::is_same<Type, int>::value)
         {
@@ -363,7 +337,7 @@ struct Numeric
             std::cout << "Error: integer division by zero!" << std::endl;
         }
         
-        *value /= rhs;
+        *value /= static_cast<Type>(rhs);
         return *this;
     }
     //========== other functions ==========
