@@ -321,7 +321,7 @@ struct Numeric
     }
 
     template <typename ArgumentType>
-    Numeric<Type>& operator/=(Type rhs)
+    Numeric<Type>& operator/=(ArgumentType rhs)
     {
         if constexpr (std::is_same<Type, int>::value)
         {
@@ -332,7 +332,7 @@ struct Numeric
                 return *this;
             }
         }
-        else if constexpr (std::numeric_limits<ArgumentType>::epsilon() > std::abs(rhs))
+        else if (std::numeric_limits<ArgumentType>::epsilon() > std::abs(rhs))
         {
             std::cout << "Error: integer division by zero!" << std::endl;
         }
@@ -448,15 +448,15 @@ void myFreeFunct(std::unique_ptr<NumType>& v) { *v += static_cast<NumType> (7); 
 //================================================================================
 void part3()
 {
-    FloatType ft( 5.5f );
-    DoubleType dt( 11.1 );
-    IntType it ( 34 );
-    DoubleType pi( 3.14 );
+    Numeric<float> ft( 5.5f );
+    Numeric<double> dt( 11.1 );
+    Numeric<int> it ( 34 );
+    Numeric<double> pi( 3.14 );
 
     std::cout << "The result of FloatType^4 divided by IntType is: ";
     ft *= ft;
     ft *= ft;
-    ft /= static_cast<float>(it);
+    ft /= static_cast<int>(it);
     std::cout << ft << std::endl;
     
     std::cout << "The result of DoubleType times 3 plus IntType is : ";
@@ -491,9 +491,9 @@ void part3()
 struct Point
 {
     Point(float x_, float y_) : x(x_), y(y_) { }
-    Point(const FloatType& x_, const FloatType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
-    Point(const DoubleType& x_, const DoubleType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
-    Point(const IntType& x_, const IntType& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
+
+    template <typename Type>
+    Point(const Numeric<Type>& x_, const Numeric<Type>& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
 
     void toString() const { std::cout << "Point { x: " << x << ", y: " << y << " }" << std::endl; }
 
@@ -504,23 +504,13 @@ struct Point
         return *this;
     }
 
-    Point& multiply(const FloatType& m)
+    template <typename Type>
+    Point& multiply(const Numeric<Type>& m)
     {
         multiply(static_cast<float>(m));
         return *this;
     }
 
-    Point& multiply(const DoubleType& m)
-    {
-        multiply(static_cast<float>(m));
-        return *this;
-    }
-
-    Point& multiply(const IntType& m)
-    {
-        multiply(static_cast<float>(m));
-        return *this;
-    }
 private:
     float x{0}, y{0};
 };
@@ -530,15 +520,15 @@ void part4()
     // ------------------------------------------------------------
     //                          Power tests
     // ------------------------------------------------------------
-    FloatType ft1(2);
-    DoubleType dt1(2);
-    IntType it1(2);    
+    Numeric<float> ft1(2);
+    Numeric<double> dt1(2);
+    Numeric<int> it1(2);    
     float floatExp = 2.0f;
     double doubleExp = 2.0;
     int intExp = 2;
-    IntType itExp(2);
-    FloatType ftExp(2.0f);
-    DoubleType dtExp(2.0);
+    Numeric<int> itExp(2);
+    Numeric<float> ftExp(2.0f);
+    Numeric<double> dtExp(2.0);
     
     // Power tests with FloatType
     std::cout << "Power tests with FloatType " << std::endl;
@@ -567,9 +557,9 @@ void part4()
     // ------------------------------------------------------------
     //                          Point tests
     // ------------------------------------------------------------
-    FloatType ft2(3.0f);
-    DoubleType dt2(4.0);
-    IntType it2(5);
+    Numeric<float> ft2(3.0f);
+    Numeric<double> dt2(4.0);
+    Numeric<int> it2(5);
     float floatMul = 6.0f;
 
     // Point tests with float
@@ -668,9 +658,9 @@ int main()
     HeapA heapA; 
 
     //assign heap primitives
-    FloatType ft ( 2.0f );
-    DoubleType dt ( 2 );
-    IntType it ( 2 );
+    Numeric<float> ft ( 2.0f );
+    Numeric<double> dt ( 2 );
+    Numeric<int> it ( 2 );
 
     std::cout << "FloatType add result=";
     ft += 2.0f;
