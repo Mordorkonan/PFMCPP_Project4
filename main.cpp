@@ -633,7 +633,7 @@ void part7()
 
     {
         using Type = decltype(dt3)::Type;
-        dt3.apply( [&dt3] (std::unique_ptr<Type>& v) -> void
+        dt3.apply( [] (std::unique_ptr<Type>& v) -> void
         {
             *v += 6.0;
         }); // This calls the templated apply fcn
