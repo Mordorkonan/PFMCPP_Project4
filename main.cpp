@@ -289,7 +289,9 @@ struct HeapA
 #include <cmath>
 #include <functional>
 #include <memory>
-
+#include <type_traits>
+#include <limits>
+//====================== Primary Template Numeric =====================
 template <typename NumType>
 struct Numeric
 {
@@ -347,8 +349,20 @@ struct Numeric
     template <typename ArgumentType>
     Numeric<Type>& divide(ArgumentType rhs)
     {
-        if (rhs == 0.0f)
-            std::cout << "warning: floating point division by zero!" << std::endl;
+        if constexpr (std::is_same<Type, int>::value)
+        {
+            if constexpr (std::is_same<ArgumentType, int>::rhs && rhs == 0 ||
+                          std::numeric_limits<ArgumentType>::epsilon() > std::abs(rhs))
+            {
+                std::cout << "Error: integer division by zero!" << std::endl;
+                return *this;
+            }
+        }
+        else if constexpr (std::numeric_limits<ArgumentType>::epsilon() > std::abs(rhs))
+        {
+            std::cout << "Error: integer division by zero!" << std::endl;
+        }
+        
         *value /= rhs;
         return *this;
     }
@@ -394,6 +408,102 @@ private:
 
     std::unique_ptr<Type> value { nullptr };
 };
+//====================== Explicit double Template Numeric =============
+template <>
+struct Numeric<double>
+{
+    using Type = double;
+
+    explicit Numeric(Type type_) : value(std::make_unique<Type>(type_)) { }
+    ~Numeric() { value.reset(nullptr); }
+    //========== operators ==========
+    operator Type() const { return *value; }
+
+    Numeric<Type>& operator+=(Type rhs)
+    {
+        *value += rhs;
+        return *this;
+    }
+
+    Numeric<Type>& operator-=(Type rhs)
+    {
+        *value -= rhs;
+        return *this;
+    }
+
+    Numeric<Type>& operator*=(Type rhs)
+    {
+        *value *= rhs;
+        return *this;
+    }
+
+    Numeric<Type>& operator/=(Type rhs)
+    {
+        if (rhs == 0.0f)
+            std::cout << "warning: floating point division by zero!" << std::endl;
+        *value /= rhs;
+        return *this;
+    }  
+    //========== arithmetic assignment functions ==========
+    Numeric<Type>& add(Type rhs)
+    {
+        *value += rhs;
+        return *this;
+    }
+
+    Numeric<Type>& subtract(Type rhs)
+    {
+        *value -= rhs;
+        return *this;
+    }
+
+    Numeric<Type>& multiply(Type rhs)
+    {
+        *value *= rhs;
+        return *this;
+    }
+
+    Numeric<Type>& divide(Type rhs)
+    {
+        if (rhs == 0.0f)
+            std::cout << "warning: floating point division by zero!" << std::endl;
+        *value /= rhs;
+        return *this;
+    }
+    //========== other functions ==========
+    Numeric<Type>& pow(Type rhs)
+    {
+        powInternal(rhs);
+        return *this;
+    }
+
+    Numeric<Type>& pow(const Numeric<Type>& rhs)
+    {
+        powInternal(static_cast<Type>(rhs));
+        return *this;
+    }
+
+    template <typename Callable>
+    Numeric<Type>& apply(Callable callable)
+    {
+        if (callable)
+        {
+            callable(value);
+        }
+        
+        return *this;
+    }
+
+private:
+    Numeric<Type>& powInternal(Type exp)
+    {
+        *value = std::pow(*value, exp);
+        return *this;
+    }
+
+    std::unique_ptr<Type> value { nullptr };
+};
+
 //===================================== Free Function ===========================
 template <typename NumType>
 void myFreeFunct(std::unique_ptr<NumType>& v) { *v += static_cast<NumType> (7); }
@@ -724,7 +834,7 @@ int main()
 
     part4();
 
-    part6();
+    // part6();
     
     std::cout << "good to go!\n";
     
