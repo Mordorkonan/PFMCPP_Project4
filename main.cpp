@@ -344,7 +344,8 @@ struct Numeric
         return *this;
     }
 
-    Numeric<Type>& divide(Type rhs)
+    template <typename ArgumentType>
+    Numeric<Type>& divide(ArgumentType rhs)
     {
         if (rhs == 0.0f)
             std::cout << "warning: floating point division by zero!" << std::endl;
@@ -393,12 +394,9 @@ private:
 
     std::unique_ptr<Type> value { nullptr };
 };
-//===================================== Free Functions ===========================
-void myFloatFreeFunct(float& v) { v += 7.0f; }
-
-void myDoubleFreeFunct(double& v) { v += 6.0; }
-
-void myIntFreeFunct(int& v) { v += 5; }
+//===================================== Free Function ===========================
+template <typename NumType>
+void myFreeFunct(std::unique_ptr<NumType>& v) { *v += static_cast<NumType> (7); }
 //================================================================================
 void part3()
 {
