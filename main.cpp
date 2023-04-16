@@ -300,7 +300,7 @@ struct Numeric
     {
         if (f)
         {
-            return f(*value);
+            return f(value);
         }
         
         return *this;
@@ -310,7 +310,7 @@ struct Numeric
     {
         if (f)
         {
-            f(*value);
+            f(value);
         }
         
         return *this;
@@ -372,11 +372,7 @@ struct Numeric<double>
     template <typename Callable>
     Numeric<Type>& apply(Callable f)
     {
-        if (f)
-        {
-            f(value);
-        }
-        
+        f(value);        
         return *this;
     }
 
@@ -609,8 +605,7 @@ void part7()
     std::cout << "ft3 before: " << ft3 << std::endl;
 
     {
-        // using Type = #4;
-        using Type = float;
+        using Type = decltype(ft3)::Type;
         ft3.apply( [&ft3] (std::unique_ptr<Type>& v) -> Numeric<Type>&
         {
             *v += 7.0f;
@@ -629,7 +624,7 @@ void part7()
     std::cout << "dt3 before: " << dt3 << std::endl;
 
     {
-        using Type = double;
+        using Type = decltype(dt3)::Type;
         dt3.apply( [&dt3] (std::unique_ptr<Type>& v) -> void
         {
             std::cout << "Called explicit template apply() function.\n";
@@ -648,7 +643,7 @@ void part7()
     std::cout << "it3 before: " << it3 << std::endl;
 
     {
-        using Type = int;
+        using Type = decltype(it3)::Type;
         it3.apply( [&it3] (std::unique_ptr<Type>& v) -> Numeric<Type>&
         {
             *v += 5;
