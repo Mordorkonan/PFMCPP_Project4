@@ -344,25 +344,25 @@ struct Numeric<double>
     //========== operators ==========
     operator Type() const { return *value; }
 
-    Numeric<Type>& operator+=(Type rhs)
+    Numeric& operator+=(Type rhs)
     {
         *value += rhs;
         return *this;
     }
 
-    Numeric<Type>& operator-=(Type rhs)
+    Numeric& operator-=(Type rhs)
     {
         *value -= rhs;
         return *this;
     }
 
-    Numeric<Type>& operator*=(Type rhs)
+    Numeric& operator*=(Type rhs)
     {
         *value *= rhs;
         return *this;
     }
 
-    Numeric<Type>& operator/=(Type rhs)
+    Numeric& operator/=(Type rhs)
     {
         if (rhs == 0.0)
             std::cout << "warning: floating point division by zero!" << std::endl;
@@ -371,21 +371,21 @@ struct Numeric<double>
     } 
     //========== other functions ==========
     template <typename ArgumentType>
-    Numeric<Type>& pow(ArgumentType& rhs)
+    Numeric& pow(ArgumentType& rhs)
     {
         powInternal(static_cast<Type>(rhs));
         return *this;
     }
 
     template <typename Callable>
-    Numeric<Type>& apply(Callable f)
+    Numeric& apply(Callable f)
     {
         f(value);        
         return *this;
     }
 
 private:
-    Numeric<Type>& powInternal(Type exp)
+    Numeric& powInternal(Type exp)
     {
         *value = static_cast<Type>(std::pow(*value, exp));
         return *this;
