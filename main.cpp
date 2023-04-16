@@ -341,13 +341,8 @@ struct Numeric
         return *this;
     }
     //========== other functions ==========
-    Numeric<Type>& pow(Type rhs)
-    {
-        powInternal(rhs);
-        return *this;
-    }
-
-    Numeric<Type>& pow(const Numeric<Type>& rhs)
+    template <typename ArgumentType>
+    Numeric<Type>& pow(ArgumentType& rhs)
     {
         powInternal(static_cast<Type>(rhs));
         return *this;
@@ -376,7 +371,7 @@ struct Numeric
 private:
     Numeric<Type>& powInternal(Type exp)
     {
-        *value = std::pow(*value, exp);
+        *value = static_cast<Type>(std::pow(*value, exp));
         return *this;
     }
 
@@ -445,13 +440,8 @@ struct Numeric<double>
         return *this;
     }
     //========== other functions ==========
-    Numeric<Type>& pow(Type rhs)
-    {
-        powInternal(rhs);
-        return *this;
-    }
-
-    Numeric<Type>& pow(const Numeric<Type>& rhs)
+    template <typename ArgumentType>
+    Numeric<Type>& pow(ArgumentType& rhs)
     {
         powInternal(static_cast<Type>(rhs));
         return *this;
@@ -471,7 +461,7 @@ struct Numeric<double>
 private:
     Numeric<Type>& powInternal(Type exp)
     {
-        *value = std::pow(*value, exp);
+        *value = static_cast<Type>(std::pow(*value, exp));
         return *this;
     }
 
