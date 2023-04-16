@@ -277,20 +277,20 @@ struct Numeric
             {
                 if (rhs == 0)
                 {
-                    std::cout << "Error: integer division by zero!" << std::endl;
+                    std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
                     return *this;
                 }
             }
 
             else if (std::numeric_limits<ArgumentType>::epsilon() > std::abs(rhs))
             {
-                std::cout << "Error: integer division by zero!" << std::endl;
+                std::cout << "can't divide integers by zero!" << std::endl;
                 return *this;
             }
         }
-        else if (std::numeric_limits<ArgumentType>::epsilon() > std::abs(rhs))
+        else if (std::numeric_limits<Type>::epsilon() > static_cast<Type>(std::abs(rhs)))
         {
-            std::cout << "Error: integer division by zero!" << std::endl;
+            std::cout << "warning: floating point division by zero!" << std::endl;
         }
         
         *value /= static_cast<Type>(rhs);
@@ -425,8 +425,8 @@ void part3()
     std::cout << "An operation followed by attempts to divide by 0, which are ignored and warns user: " << std::endl;
     it *= it;
     it /= 0;
-    it /= static_cast<int>(0.0f);
-    it /= static_cast<int>(0.0);
+    it /= 0.0f;
+    it /= 0.0;
     std::cout << it << std::endl;
     
     std::cout << "FloatType x IntType  =  ";
@@ -635,7 +635,6 @@ void part7()
         using Type = decltype(dt3)::Type;
         dt3.apply( [&dt3] (std::unique_ptr<Type>& v) -> void
         {
-            std::cout << "Called explicit template apply() function.\n";
             *v += 6.0;
         }); // This calls the templated apply fcn
     }
