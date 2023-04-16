@@ -77,7 +77,7 @@ Templates and Containers
 
 If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptasks/src/master/Projects/Project4/Part7Example.cpp
 */
-
+/*
 #include <iostream>
 void part7()
 {
@@ -129,7 +129,7 @@ void part7()
     std::cout << "it3 after: " << it3 << std::endl;
     std::cout << "---------------------\n" << std::endl;    
 }
-
+*/
 /*
 your program should generate the following output EXACTLY.
 This includes the warnings. 
@@ -288,117 +288,62 @@ struct HeapA
 #include <iostream>
 #include <cmath>
 #include <functional>
+#include <memory>
 
-struct DoubleType;
-struct IntType;
-
-struct FloatType
+template <typename NumType>
+struct Numeric
 {
-    explicit FloatType(float float_) : value(new float(float_)) { }
-    ~FloatType() { delete value; }
-    operator float() const;
-    FloatType& operator+=(float rhs);
-    FloatType& operator-=(float rhs);
-    FloatType& operator*=(float rhs);
-    FloatType& operator/=(float rhs);
+    using Type = NumType;
+
+    explicit Numeric(Type type_) : value(std::make_unique<Type>(type_)) { }
+    ~Numeric() { value.reset(nullptr); }
+    operator NumType() const;
+    Numeric& operator+=(Type rhs);
+    Numeric& operator-=(Type rhs);
+    Numeric& operator*=(Type rhs);
+    Numeric& operator/=(Type rhs);
     
 
-    FloatType& add(float rhs);
-    FloatType& subtract(float rhs);
-    FloatType& multiply(float rhs);
-    FloatType& divide(float rhs);
+    Numeric& add(Type rhs);
+    Numeric& subtract(Type rhs);
+    Numeric& multiply(Type rhs);
+    Numeric& divide(Type rhs);
 
-    FloatType& pow(float rhs);
-    FloatType& pow(const FloatType& rhs);
-    FloatType& pow(const DoubleType& rhs);
-    FloatType& pow(const IntType& rhs);
+    Numeric& pow(Type rhs);
+    Numeric& pow(const Numeric& rhs);
 
-    FloatType& apply(std::function<FloatType&(float&)> f);
-    FloatType& apply(void (*f)(float&));
+    Numeric& apply(std::function<Numeric&(Type&)> f);
+    Numeric& apply(void (*f)(Type&));
 
 private:
-    FloatType& powInternal(float exp);
+    Numeric& powInternal(Type exp);
 
-    float* value = nullptr;
-};
-// ============================================================
-struct DoubleType
-{
-    explicit DoubleType(double double_) : value(new double(double_)) { }
-    ~DoubleType() { delete value; }
-    operator double() const;
-    DoubleType& operator+=(double rhs);
-    DoubleType& operator-=(double rhs);
-    DoubleType& operator*=(double rhs);
-    DoubleType& operator/=(double rhs);
-
-    DoubleType& add(double rhs);
-    DoubleType& subtract(double rhs);
-    DoubleType& multiply(double rhs);
-    DoubleType& divide(double rhs);
-
-    DoubleType& pow(double rhs);
-    DoubleType& pow(const FloatType& rhs);
-    DoubleType& pow(const DoubleType& rhs);
-    DoubleType& pow(const IntType& rhs);
-
-    DoubleType& apply(std::function<DoubleType&(double&)> f);
-    DoubleType& apply(void (*f)(double&));
-
-private:
-    DoubleType& powInternal(double exp);
-
-    double* value = nullptr;
-};
-// ============================================================
-struct IntType
-{
-    explicit IntType(int int_) : value(new int(int_)) { }
-    ~IntType() { delete value; }
-    operator int() const;
-    IntType& operator+=(int rhs);
-    IntType& operator-=(int rhs);
-    IntType& operator*=(int rhs);
-    IntType& operator/=(int rhs);
-
-    IntType& add(int rhs);
-    IntType& subtract(int rhs);
-    IntType& multiply(int rhs);
-    IntType& divide(int rhs);
-
-    IntType& pow(int rhs);
-    IntType& pow(const FloatType& rhs);
-    IntType& pow(const DoubleType& rhs);
-    IntType& pow(const IntType& rhs);
-
-    IntType& apply(std::function<IntType&(int&)> f);
-    IntType& apply(void (*f)(int&));
-
-private:
-    IntType& powInternal(int exp);
-
-    int* value = nullptr;
+    std::unique_ptr<Type> value { nullptr };
 };
 // ======================================== Float primitive ==========
-FloatType& FloatType::add(float rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::add(NumType rhs)
 {
     *value += rhs;
     return *this;
 }
 
-FloatType& FloatType::subtract(float rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::subtract(NumType rhs)
 {
     *value -= rhs;
     return *this;
 }
 
-FloatType& FloatType::multiply(float rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::multiply(NumType rhs)
 {
     *value *= rhs;
     return *this;
 }
 
-FloatType& FloatType::divide(float rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::divide(NumType rhs)
 {
     if (rhs == 0.0f)
         std::cout << "warning: floating point division by zero!" << std::endl;
@@ -406,27 +351,32 @@ FloatType& FloatType::divide(float rhs)
     return *this;
 }
 // ======================================== Float operators ===========
-FloatType::operator float() const { return *value; }
+template <typename NumType>
+Numeric<NumType>::operator NumType() const { return *value; }
 
-FloatType& FloatType::operator+=(float rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::operator+=(NumType rhs)
 {
     *value += rhs;
     return *this;
 }
 
-FloatType& FloatType::operator-=(float rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::operator-=(NumType rhs)
 {
     *value -= rhs;
     return *this;
 }
 
-FloatType& FloatType::operator*=(float rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::operator*=(NumType rhs)
 {
     *value *= rhs;
     return *this;
 }
 
-FloatType& FloatType::operator/=(float rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::operator/=(NumType rhs)
 {
     if (rhs == 0.0f)
         std::cout << "warning: floating point division by zero!" << std::endl;
@@ -434,7 +384,8 @@ FloatType& FloatType::operator/=(float rhs)
     return *this;
 }
 // ======================================== Float Apply func ==========
-FloatType& FloatType::apply(std::function<FloatType&(float&)> f)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::apply(std::function<Numeric<NumType>&(NumType&)> f)
 {
     if (f)
     {
@@ -444,167 +395,8 @@ FloatType& FloatType::apply(std::function<FloatType&(float&)> f)
     return *this;
 }
 
-FloatType& FloatType::apply(void (*f)(float&))
-{
-    if (f)
-    {
-        f(*value);
-    }
-    
-    return *this;
-}
-// ======================================== Double primitive ==========
-DoubleType& DoubleType::add(double rhs)
-{
-    *value += rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::subtract(double rhs)
-{
-    *value -= rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::multiply(double rhs)
-{
-    *value *= rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::divide(double rhs)
-{
-    if (rhs == 0.0)
-        std::cout << "warning: floating point division by zero!" << std::endl;
-
-    *value /= rhs;
-    return *this;        
-}
-// ======================================== Double operators ==========
-DoubleType::operator double() const { return *value; }
-
-DoubleType& DoubleType::operator+=(double rhs)
-{
-    *value += rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::operator-=(double rhs)
-{
-    *value -= rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::operator*=(double rhs)
-{
-    *value *= rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::operator/=(double rhs)
-{
-    if (rhs == 0.0)
-        std::cout << "warning: floating point division by zero!" << std::endl;
-
-    *value /= rhs;
-    return *this;        
-}
-// ======================================== Double Apply func =========
-DoubleType& DoubleType::apply(std::function<DoubleType&(double&)> f)
-{
-    if (f)
-    {
-        return f(*value);
-    }
-    
-    return *this;
-}
-
-DoubleType& DoubleType::apply(void (*f)(double&))
-{
-    if (f)
-    {
-        f(*value);
-    }
-    
-    return *this;
-}
-// ======================================== Int primitive ==========
-IntType& IntType::add(int rhs)
-{
-    *value += rhs;
-    return *this;
-}
-
-IntType& IntType::subtract(int rhs)
-{
-    *value -= rhs;
-    return *this;
-}
-
-IntType& IntType::multiply(int rhs)
-{
-    *value *= rhs;
-    return *this;
-}
-
-IntType& IntType::divide(int rhs)
-{
-    if (rhs == 0)
-    {
-        std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
-    }
-    else
-    {
-        *value /=  rhs;        
-    }
-    return *this;
-}
-// ======================================== Int operators =============
-IntType::operator int() const { return *value; }
-
-IntType& IntType::operator+=(int rhs)
-{
-    *value += rhs;
-    return *this;
-}
-
-IntType& IntType::operator-=(int rhs)
-{
-    *value -= rhs;
-    return *this;
-}
-
-IntType& IntType::operator*=(int rhs)
-{
-    *value *= rhs;
-    return *this;
-}
-
-IntType& IntType::operator/=(int rhs)
-{
-    if (rhs == 0)
-    {
-        std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
-    }
-    else
-    {
-        *value /=  rhs;        
-    }
-    return *this;
-}
-// ======================================== Int Apply func ============
-IntType& IntType::apply(std::function<IntType&(int&)> f)
-{
-    if (f)
-    {
-        return f(*value);
-    }
-    
-    return *this;
-}
-
-IntType& IntType::apply(void (*f)(int&))
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::apply(void (*f)(NumType&))
 {
     if (f)
     {
@@ -614,90 +406,24 @@ IntType& IntType::apply(void (*f)(int&))
     return *this;
 }
 // ======================================== FloatType pow / powInternal ==========
-FloatType& FloatType::pow(float rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::pow(NumType rhs)
 {
     powInternal(rhs);
     return *this;
 }
 
-FloatType& FloatType::pow(const FloatType& rhs)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::pow(const Numeric<NumType>& rhs)
 {
-    powInternal(static_cast<float>(rhs));
+    powInternal(static_cast<NumType>(rhs));
     return *this;
 }
 
-FloatType& FloatType::pow(const DoubleType& rhs)
-{
-    powInternal(static_cast<float>(rhs));
-    return *this;
-}
-FloatType& FloatType::pow(const IntType& rhs)
-{
-    powInternal(static_cast<float>(rhs));
-    return *this;
-}
-
-FloatType& FloatType::powInternal(float exp)
+template <typename NumType>
+Numeric<NumType>& Numeric<NumType>::powInternal(NumType exp)
 {
     *value = std::pow(*value, exp);
-    return *this;
-}
-// ======================================== DoubleType pow / powInternal ==========
-DoubleType& DoubleType::pow(double rhs)
-{
-    powInternal(rhs);
-    return *this;
-}
-
-DoubleType& DoubleType::pow(const FloatType& rhs)
-{
-    powInternal(static_cast<double>(rhs));
-    return *this;
-}
-
-DoubleType& DoubleType::pow(const DoubleType& rhs)
-{
-    powInternal(static_cast<double>(rhs));
-    return *this;
-}
-DoubleType& DoubleType::pow(const IntType& rhs)
-{
-    powInternal(static_cast<double>(rhs));
-    return *this;
-}
-
-DoubleType& DoubleType::powInternal(double exp)
-{
-    *value = std::pow(*value, exp);
-    return *this;
-}
-// ======================================== IntType pow / powInternal ==========
-IntType& IntType::pow(int rhs)
-{
-    powInternal(rhs);
-    return *this;
-}
-
-IntType& IntType::pow(const FloatType& rhs)
-{
-    powInternal(static_cast<int>(rhs));
-    return *this;
-}
-
-IntType& IntType::pow(const DoubleType& rhs)
-{
-    powInternal(static_cast<int>(rhs));
-    return *this;
-}
-IntType& IntType::pow(const IntType& rhs)
-{
-    powInternal(static_cast<int>(rhs));
-    return *this;
-}
-
-IntType& IntType::powInternal(int exp)
-{
-    *value = static_cast<int>(std::pow(*value, exp));
     return *this;
 }
 //===================================== Free Functions ===========================
@@ -869,7 +595,7 @@ void part4()
     p3.toString();   
     std::cout << "---------------------\n" << std::endl;
 }
-
+/*
 void part6()
 {
     FloatType ft3(3.0f);
@@ -921,7 +647,7 @@ void part6()
     std::cout << "it3 after: " << it3 << std::endl;
     std::cout << "---------------------\n" << std::endl;    
 }
-
+*/
 //================================================================================
 int main()
 {   
