@@ -273,8 +273,16 @@ struct Numeric
     {
         if constexpr (std::is_same<Type, int>::value)
         {
-            if constexpr (std::is_same<ArgumentType, int>::rhs && rhs == 0 ||
-                          std::numeric_limits<ArgumentType>::epsilon() > std::abs(rhs))
+            if constexpr (std::is_same<ArgumentType, int>::value)
+            {
+                if (rhs == 0)
+                {
+                    std::cout << "Error: integer division by zero!" << std::endl;
+                    return *this;
+                }
+            }
+
+            else if (std::numeric_limits<ArgumentType>::epsilon() > std::abs(rhs))
             {
                 std::cout << "Error: integer division by zero!" << std::endl;
                 return *this;
@@ -356,7 +364,7 @@ struct Numeric<double>
 
     Numeric<Type>& operator/=(Type rhs)
     {
-        if (rhs == 0.0f)
+        if (rhs == 0.0)
             std::cout << "warning: floating point division by zero!" << std::endl;
         *value /= rhs;
         return *this;
@@ -628,7 +636,7 @@ void part7()
         dt3.apply( [&dt3] (std::unique_ptr<Type>& v) -> void
         {
             std::cout << "Called explicit template apply() function.\n";
-            *v += 6.0f;
+            *v += 6.0;
         }); // This calls the templated apply fcn
     }
     
