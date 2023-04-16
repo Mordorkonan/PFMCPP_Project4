@@ -250,26 +250,26 @@ struct Numeric
     //========== operators ==========
     operator Type() const { return *value; }
 
-    Numeric<Type>& operator+=(Type rhs)
+    Numeric& operator+=(Type rhs)
     {
         *value += rhs;
         return *this;
     }
 
-    Numeric<Type>& operator-=(Type rhs)
+    Numeric& operator-=(Type rhs)
     {
         *value -= rhs;
         return *this;
     }
 
-    Numeric<Type>& operator*=(Type rhs)
+    Numeric& operator*=(Type rhs)
     {
         *value *= rhs;
         return *this;
     }
 
     template <typename ArgumentType>
-    Numeric<Type>& operator/=(ArgumentType rhs)
+    Numeric& operator/=(const ArgumentType& rhs)
     {
         if constexpr (std::is_same<Type, int>::value)
         {
@@ -298,13 +298,13 @@ struct Numeric
     }
     //========== other functions ==========
     template <typename ArgumentType>
-    Numeric<Type>& pow(ArgumentType& rhs)
+    Numeric& pow(const ArgumentType& rhs)
     {
         powInternal(static_cast<Type>(rhs));
         return *this;
     }
 
-    Numeric<Type>& apply(std::function<Numeric&(std::unique_ptr<Type>&)> f)
+    Numeric& apply(std::function<Numeric&(std::unique_ptr<Type>&)> f)
     {
         if (f)
         {
@@ -314,7 +314,7 @@ struct Numeric
         return *this;
     }
 
-    Numeric<Type>& apply(void (*f)(std::unique_ptr<Type>&))
+    Numeric& apply(void (*f)(std::unique_ptr<Type>&))
     {
         if (f)
         {
@@ -325,7 +325,7 @@ struct Numeric
     }
 
 private:
-    Numeric<Type>& powInternal(Type exp)
+    Numeric& powInternal(Type exp)
     {
         *value = static_cast<Type>(std::pow(*value, exp));
         return *this;
