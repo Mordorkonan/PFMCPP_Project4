@@ -348,7 +348,7 @@ struct Numeric
         return *this;
     }
 
-    Numeric<Type>& apply(std::function<Numeric<Type>&(Type&)> f)
+    Numeric<Type>& apply(std::function<Numeric&(std::unique_ptr<Type>&)> f)
     {
         if (f)
         {
@@ -358,7 +358,7 @@ struct Numeric
         return *this;
     }
 
-    Numeric<Type>& apply(void (*f)(Type&))
+    Numeric<Type>& apply(void (*f)(std::unique_ptr<Type>&))
     {
         if (f)
         {
@@ -412,33 +412,7 @@ struct Numeric<double>
             std::cout << "warning: floating point division by zero!" << std::endl;
         *value /= rhs;
         return *this;
-    }  
-    //========== arithmetic assignment functions ==========
-    Numeric<Type>& add(Type rhs)
-    {
-        *value += rhs;
-        return *this;
-    }
-
-    Numeric<Type>& subtract(Type rhs)
-    {
-        *value -= rhs;
-        return *this;
-    }
-
-    Numeric<Type>& multiply(Type rhs)
-    {
-        *value *= rhs;
-        return *this;
-    }
-
-    Numeric<Type>& divide(Type rhs)
-    {
-        if (rhs == 0.0f)
-            std::cout << "warning: floating point division by zero!" << std::endl;
-        *value /= rhs;
-        return *this;
-    }
+    } 
     //========== other functions ==========
     template <typename ArgumentType>
     Numeric<Type>& pow(ArgumentType& rhs)
@@ -448,11 +422,11 @@ struct Numeric<double>
     }
 
     template <typename Callable>
-    Numeric<Type>& apply(Callable callable)
+    Numeric<Type>& apply(Callable f)
     {
-        if (callable)
+        if (f)
         {
-            callable(value);
+            f(value);
         }
         
         return *this;
