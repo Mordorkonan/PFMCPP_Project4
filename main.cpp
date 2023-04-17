@@ -168,35 +168,35 @@ struct Numeric
     ~Numeric() { value.reset(nullptr); }
     //========== operators ==========
     template <typename ArgumentType>
-    Numeric& operator=(const ArgumentType& rhs) { *value = static_cast<Type>(rhs); return *value; }
+    Numeric& operator=(const ArgumentType& rhs) { *value = static_cast<NumType>(rhs); return *value; }
 
     operator NumType() const { return *value; }
 
     template <typename ArgumentType>
     Numeric& operator+=(const ArgumentType& rhs)
     {
-        *value += static_cast<Type>(rhs);
+        *value += static_cast<NumType>(rhs);
         return *this;
     }
 
     template <typename ArgumentType>
     Numeric& operator-=(const ArgumentType& rhs)
     {
-        *value -= static_cast<Type>(rhs);
+        *value -= static_cast<NumType>(rhs);
         return *this;
     }
 
     template <typename ArgumentType>
     Numeric& operator*=(const ArgumentType& rhs)
     {
-        *value *= static_cast<Type>(rhs);
+        *value *= static_cast<NumType>(rhs);
         return *this;
     }
 
     template <typename ArgumentType>
     Numeric& operator/=(const ArgumentType& rhs)
     {
-        if constexpr (std::is_same<Type, int>::value)
+        if constexpr (std::is_same<NumType, int>::value)
         {
             if constexpr (std::is_same<ArgumentType, int>::value)
             {
@@ -213,12 +213,12 @@ struct Numeric
                 return *this;
             }
         }
-        else if (std::numeric_limits<Type>::epsilon() > static_cast<Type>(std::abs(rhs)))
+        else if (std::numeric_limits<NumType>::epsilon() > static_cast<NumType>(std::abs(rhs)))
         {
             std::cout << "warning: floating point division by zero!" << std::endl;
         }
         
-        *value /= static_cast<Type>(rhs);
+        *value /= static_cast<NumType>(rhs);
         return *this;
     }
     //========== other functions ==========
