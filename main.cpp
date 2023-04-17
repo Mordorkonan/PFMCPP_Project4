@@ -168,7 +168,7 @@ struct Numeric
     ~Numeric() { value.reset(nullptr); }
     //========== operators ==========
     template <typename ArgumentType>
-    Numeric& operator=(const ArgumentType& rhs) { *value = static_cast<NumType>(rhs); return *value; }
+    Numeric& operator=(const ArgumentType& rhs) { *value = static_cast<Type>(rhs); return *value; }
 
     operator NumType() const { return *value; }
 
@@ -240,6 +240,11 @@ private:
     std::unique_ptr<Type> value { nullptr };
 };
 
+template <typename NumType>
+NumType cube(std::unique_ptr<NumType>& rhs)
+{
+    return std::pow(*rhs, 3);
+}
 //===================================== Free Function ===========================
 
 template <typename NumType>
