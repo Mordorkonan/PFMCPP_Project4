@@ -152,7 +152,6 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
  Wait for my code review.
  */
 
-#include <iostream>
 #include <cmath>
 #include <functional>
 #include <memory>
@@ -164,13 +163,14 @@ struct Numeric
 {
     using Type = Temporary<NumType>;
 
-    explicit Numeric(Type type_) : value(std::make_unique<Type>(type_)) { }
+    template <typename ArgumentType>
+    explicit Numeric(ArgumentType type_) : value(std::make_unique<Type>(static_cast<NumType>(type_))) { }
     ~Numeric() { value.reset(nullptr); }
     //========== operators ==========
     template <typename ArgumentType>
-    Type& operator=(const ArgumentType& rhs) { *value = static_cast<Type>(rhs); }
+    Numeric& operator=(const ArgumentType& rhs) { *value = static_cast<NumType>(rhs); return *value; }
 
-    operator Type() { return *value; }
+    operator NumType() const { return *value; }
 
     template <typename ArgumentType>
     Numeric& operator+=(const ArgumentType& rhs)
@@ -244,35 +244,6 @@ private:
 
 template <typename NumType>
 void myNumericFreeFunct(std::unique_ptr<NumType>& v) { *v += static_cast<NumType> (7); }
-
-//================================================================================
-
-struct Point
-{
-    Point(float x_, float y_) : x(x_), y(y_) { }
-
-    template <typename Type>
-    Point(const Numeric<Type>& x_, const Numeric<Type>& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
-
-    void toString() const { std::cout << "Point { x: " << x << ", y: " << y << " }" << std::endl; }
-
-    Point& multiply(float m)
-    {
-        x *= m;
-        y *= m;
-        return *this;
-    }
-
-    template <typename Type>
-    Point& multiply(const Numeric<Type>& m)
-    {
-        multiply(static_cast<float>(m));
-        return *this;
-    }
-
-private:
-    float x{0}, y{0};
-};
 
 //================================================================================
 
