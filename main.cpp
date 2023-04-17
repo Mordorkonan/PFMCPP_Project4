@@ -24,6 +24,7 @@ Create a branch named Part8
  */
 
 #include <typeinfo>
+#include <iostream>
 template<typename NumericType>
 struct Temporary
 {
@@ -36,12 +37,15 @@ struct Temporary
      revise these conversion functions to read/write to 'v' here
      hint: what qualifier do read-only functions usually have?
      */
-    operator ___() { /* read-only function */ }
-    operator ___() { /* read/write function */ }
+    operator NumericType() const { return v; }
+    operator NumericType&() { return v; }
 private:
     static int counter;
     NumericType v;
 };
+
+template <typename NumericType>
+int Temporary<NumericType>::counter = 0;
 
 /*
  2) add the definition of Temporary::counter here, which is a static variable and must be defined outside of the class.
@@ -52,6 +56,7 @@ private:
  3) You'll need to template your overloaded math operator functions in your Templated Class from Ch5 p04
     use static_cast to convert whatever type is passed in to your template's NumericType before performing the +=, -=, etc.  here's an example implementation:
  */
+/*
 namespace example
 {
 template<typename NumericType>
@@ -67,7 +72,7 @@ struct Numeric
     //snip
 };
 }
-
+*/
 /*
  4) remove your specialized <double> template of your Numeric<T> class from the previous task (ch5 p04)
     replace the 2 apply() functions in your Numeric<T> with the single templated apply() function from the specialized <double> template.
@@ -125,7 +130,7 @@ i cubed: 531441
 
 Use a service like https://www.diffchecker.com/diff to compare your output. 
 */
-
+/*
 #include <iostream>
 int main()
 {
@@ -220,7 +225,7 @@ struct HeapA
     }
     A* a = nullptr;
 };
-
+*/
 
 
 
@@ -254,23 +259,26 @@ struct Numeric
     explicit Numeric(Type type_) : value(std::make_unique<Type>(type_)) { }
     ~Numeric() { value.reset(nullptr); }
     //========== operators ==========
-    operator Type() const { return *value; }
+    operator Temporary<Type>&() { return *value; }
 
-    Numeric& operator+=(Type rhs)
+    template <typename ArgumentType>
+    Numeric& operator+=(const ArgumentType& rhs)
     {
-        *value += rhs;
+        *value += static_cast<Type>(rhs);
         return *this;
     }
 
-    Numeric& operator-=(Type rhs)
+    template <typename ArgumentType>
+    Numeric& operator-=(const ArgumentType& rhs)
     {
-        *value -= rhs;
+        *value -= static_cast<Type>(rhs);
         return *this;
     }
 
-    Numeric& operator*=(Type rhs)
+    template <typename ArgumentType>
+    Numeric& operator*=(const ArgumentType& rhs)
     {
-        *value *= rhs;
+        *value *= static_cast<Type>(rhs);
         return *this;
     }
 
@@ -306,100 +314,20 @@ struct Numeric
     template <typename ArgumentType>
     Numeric& pow(const ArgumentType& rhs)
     {
-        powInternal(static_cast<Type>(rhs));
+        *value = std::pow(*value, static_cast<Type>(rhs));
         return *this;
     }
 
-    Numeric& apply(std::function<Numeric&(std::unique_ptr<Type>&)> f)
-    {
-        if (f)
-        {
-            return f(value);
-        }
-        
-        return *this;
-    }
-
-    Numeric& apply(void (*f)(std::unique_ptr<Type>&))
-    {
-        if (f)
-        {
-            f(value);
-        }
-        
-        return *this;
-    }
-
-private:
-    Numeric& powInternal(Type exp)
-    {
-        *value = static_cast<Type>(std::pow(*value, exp));
-        return *this;
-    }
-
-    std::unique_ptr<Type> value { nullptr };
-};
-//====================== Explicit double Template Numeric =============
-template <>
-struct Numeric<double>
-{
-    using Type = double;
-
-    explicit Numeric(Type type_) : value(std::make_unique<Type>(type_)) { }
-    ~Numeric() { value.reset(nullptr); }
-    //========== operators ==========
-    operator Type() const { return *value; }
-
-    Numeric& operator+=(Type rhs)
-    {
-        *value += rhs;
-        return *this;
-    }
-
-    Numeric& operator-=(Type rhs)
-    {
-        *value -= rhs;
-        return *this;
-    }
-
-    Numeric& operator*=(Type rhs)
-    {
-        *value *= rhs;
-        return *this;
-    }
-
-    Numeric& operator/=(Type rhs)
-    {
-        if (rhs == 0.0)
-            std::cout << "warning: floating point division by zero!" << std::endl;
-        *value /= rhs;
-        return *this;
-    } 
-    //========== other functions ==========
     template <typename ArgumentType>
-    Numeric& pow(ArgumentType& rhs)
-    {
-        powInternal(static_cast<Type>(rhs));
-        return *this;
-    }
-
-    template <typename Callable>
-    Numeric& apply(Callable f)
+    Numeric& apply(ArgumentType f)
     {
         f(value);        
         return *this;
     }
 
 private:
-    Numeric& powInternal(Type exp)
-    {
-        *value = static_cast<Type>(std::pow(*value, exp));
-        return *this;
-    }
-
     std::unique_ptr<Type> value { nullptr };
 };
-
 //===================================== Free Function ===========================
 template <typename NumType>
 void myNumericFreeFunct(std::unique_ptr<NumType>& v) { *v += static_cast<NumType> (7); }
