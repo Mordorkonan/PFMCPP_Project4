@@ -168,7 +168,7 @@ struct Numeric
     ~Numeric() { value.reset(nullptr); }
     //========== operators ==========
     template <typename ArgumentType>
-    Numeric& operator=(const ArgumentType& rhs) { *value = static_cast<NumType>(rhs); return *value; }
+    Numeric& operator=(const ArgumentType& rhs) { *value = static_cast<NumType>(rhs); return *this; }
 
     operator NumType() const { return *value; }
 
@@ -225,7 +225,7 @@ struct Numeric
     template <typename ArgumentType>
     Numeric& pow(const ArgumentType& rhs)
     {
-        *value = std::pow(*value, static_cast<Type>(rhs));
+        *value = static_cast<NumType>(std::pow(static_cast<NumType>(*value), static_cast<NumType>(rhs)));
         return *this;
     }
 
@@ -243,7 +243,9 @@ private:
 template <typename NumType>
 NumType cube(std::unique_ptr<NumType>& rhs)
 {
-    return std::pow(*rhs, 3);
+    NumType value = *rhs;
+    *rhs = value * value * value;
+    return *rhs;
 }
 //================================================================================
 struct Point
@@ -298,7 +300,7 @@ int main()
     i += 2.f; i -= f; i *= d; i /= 2.f;
     std::cout << "i: "<< i << std::endl;
     
-    Point p(f, i);
+    Point p(f, static_cast<float>(i));
     p.toString();
     
     d *= -1;
