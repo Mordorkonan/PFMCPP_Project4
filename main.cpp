@@ -245,11 +245,36 @@ NumType cube(std::unique_ptr<NumType>& rhs)
 {
     return std::pow(*rhs, 3);
 }
-//===================================== Free Function ===========================
+//================================================================================
+struct Point
+{
+    Point(float x_, float y_) : x(x_), y(y_) { }
 
+    template <typename Type>
+    Point(const Numeric<Type>& x_, const Numeric<Type>& y_) : Point(static_cast<float>(x_), static_cast<float>(y_)) { }
+
+    void toString() const { std::cout << "Point { x: " << x << ", y: " << y << " }" << std::endl; }
+
+    Point& multiply(float m)
+    {
+        x *= m;
+        y *= m;
+        return *this;
+    }
+
+    template <typename Type>
+    Point& multiply(const Numeric<Type>& m)
+    {
+        multiply(static_cast<float>(m));
+        return *this;
+    }
+
+private:
+    float x{0}, y{0};
+};
+//===================================== Free Function ===========================
 template <typename NumType>
 void myNumericFreeFunct(std::unique_ptr<NumType>& v) { *v += static_cast<NumType> (7); }
-
 //================================================================================
 
 int main()
