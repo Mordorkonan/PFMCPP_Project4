@@ -23,6 +23,8 @@ Create a branch named Part8
  1) Here is a starting point for how to implement your Temporary struct.
  */
 
+
+
 #include <typeinfo>
 #include <iostream>
 template<typename NumericType>
@@ -241,11 +243,10 @@ private:
 };
 
 template <typename NumType>
-NumType cube(std::unique_ptr<NumType>& rhs)
+void cube(std::unique_ptr<NumType>& rhs)
 {
     NumType value = *rhs;
     *rhs = value * value * value;
-    return *rhs;
 }
 //================================================================================
 struct Point
