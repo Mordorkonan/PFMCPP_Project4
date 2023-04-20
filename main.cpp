@@ -165,7 +165,7 @@ struct Numeric
 {
     using Type = Temporary<NumType>;
 
-    explicit Numeric(ArgumentType type_) : value(std::make_unique<Type>(static_cast<NumType>(type_))) { }
+    explicit Numeric(NumType type_) : value(std::make_unique<Type>(static_cast<NumType>(type_))) { }
     ~Numeric() { value.reset(nullptr); }
     //========== operators ==========
     template <typename ArgumentType>
