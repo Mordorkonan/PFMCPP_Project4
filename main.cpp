@@ -77,6 +77,11 @@ struct Temporary
         std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
                   << counter++ << std::endl;
     }
+    ~Temporary() { }
+    // Temporary(const Temporary& other) = delete; // deleted by macro
+    // Temporary& operator=(const Temporary& other) = delete; // deleted by macro
+    Temporary(Temporary&& other) { v = other.v; }
+    Temporary& operator=(Temporary&& other) { v = other.v; return *this; }
 
     operator NumericType() const 
     { 
@@ -125,6 +130,19 @@ struct Numeric
 
     explicit Numeric(NumType type_) : value(std::make_unique<Type>(type_)) { }
     ~Numeric() { value.reset(nullptr); }
+    // Numeric(const Numeric& other) = delete; // deleted by macro
+    // Numeric& operator=(const Numeric& other) = delete; // deleted by macro
+    Numeric(Numeric&& other)
+    {
+        value = other.value;
+        other.value.reset(nullptr);
+    }
+    Numeric& operator=(Numeric&& other)
+    {
+        value = other.value;
+        other.value.reset(nullptr);
+        return *this;
+    }
     //========== operators ==========
     template <typename ArgumentType>
     Numeric& operator=(const ArgumentType& rhs) { *value = static_cast<NumType>(rhs); return *this; }
