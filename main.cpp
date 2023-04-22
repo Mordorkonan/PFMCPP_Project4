@@ -13,14 +13,6 @@ Create a branch named Part9
  2) move these macros after the JUCE_LEAK_DETECTOR macro :
  */
 
-#define JUCE_DECLARE_NON_COPYABLE(className) \
-            className (const className&) = delete;\
-            className& operator= (const className&) = delete;
-
-#define JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(className) \
-            JUCE_DECLARE_NON_COPYABLE(className) \
-            JUCE_LEAK_DETECTOR(className)
-
 /*
  3) add JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary) to the end of the  Temporary<> struct
  
@@ -75,6 +67,7 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
 #include <iostream>
 #include <cmath>
 #include <functional>
+#include "LeakedObjectDetector.h"
 
 template<typename NumericType>
 struct Temporary
@@ -84,6 +77,11 @@ struct Temporary
         std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
                   << counter++ << std::endl;
     }
+    ~Temporary() { }
+    // Temporary(const Temporary& other) = delete; // deleted by macro
+    // Temporary& operator=(const Temporary& other) = delete; // deleted by macro
+    Temporary(Temporary&& other) { v = other.v; }
+    Temporary& operator=(Temporary&& other) { v = other.v; return *this; }
 
     operator NumericType() const 
     { 
@@ -96,6 +94,8 @@ struct Temporary
 private:
     static int counter;
     NumericType v;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 };
 
 
@@ -130,6 +130,19 @@ struct Numeric
 
     explicit Numeric(NumType type_) : value(std::make_unique<Type>(type_)) { }
     ~Numeric() { value.reset(nullptr); }
+    // Numeric(const Numeric& other) = delete; // deleted by macro
+    // Numeric& operator=(const Numeric& other) = delete; // deleted by macro
+    Numeric(Numeric&& other)
+    {
+        value = other.value;
+        other.value.reset(nullptr);
+    }
+    Numeric& operator=(Numeric&& other)
+    {
+        value = other.value;
+        other.value.reset(nullptr);
+        return *this;
+    }
     //========== operators ==========
     template <typename ArgumentType>
     Numeric& operator=(const ArgumentType& rhs) { *value = static_cast<NumType>(rhs); return *this; }
@@ -202,13 +215,15 @@ struct Numeric
 
 private:
     std::unique_ptr<Type> value { nullptr };
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
 };
 
 template <typename NumType>
 void cube(std::unique_ptr<NumType>& rhs)
 {
-    NumType value = *rhs;
-    *rhs = value * value * value;
+    auto& value = *rhs;
+    value = value * value * value;
 }
 //================================================================================
 struct Point
