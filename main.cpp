@@ -95,7 +95,7 @@ private:
     static int counter;
     NumericType v;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 };
 
 
@@ -216,13 +216,13 @@ struct Numeric
 private:
     std::unique_ptr<Type> value { nullptr };
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
 };
 
 template <typename NumType>
 void cube(std::unique_ptr<NumType>& rhs)
 {
-    NumType value = *rhs;
+    NumType value = static_cast<NumType&&>(*rhs);
     *rhs = value * value * value;
 }
 //================================================================================
