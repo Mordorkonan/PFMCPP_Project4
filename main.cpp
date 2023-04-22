@@ -222,8 +222,8 @@ private:
 template <typename NumType>
 void cube(std::unique_ptr<NumType>& rhs)
 {
-    NumType value = static_cast<NumType&&>(*rhs);
-    *rhs = value * value * value;
+    auto& value = *rhs;
+    value = value * value * value;
 }
 //================================================================================
 struct Point
